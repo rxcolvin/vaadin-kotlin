@@ -1,11 +1,11 @@
-package com.dankim.views
+package com.kokolex.vaadinexamplar.views
 
-import com.dankim.database
-import com.dankim.db.Todo
-import com.dankim.db.Todos
-import com.dankim.db.User
-import com.dankim.db.Users
-import com.dankim.util.Observable
+import com.kokolex.vaadinexamplar.database
+import com.kokolex.vaadinexamplar.db.Todo
+import com.kokolex.vaadinexamplar.db.Todos
+import com.kokolex.vaadinexamplar.db.User
+import com.kokolex.vaadinexamplar.db.Users
+import com.kokolex.vaadinexamplar.util.Observable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

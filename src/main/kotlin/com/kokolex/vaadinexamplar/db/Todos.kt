@@ -1,4 +1,4 @@
-package com.dankim.db
+package com.kokolex.vaadinexamplar.db
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.javatime.date

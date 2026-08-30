@@ -1,9 +1,12 @@
-package com.dankim.views
+package com.kokolex.vaadinexamplar.views
 
-import com.dankim.db.Todo
-import com.dankim.db.User
+import com.kokolex.vaadinexamplar.db.Todo
+import com.kokolex.vaadinexamplar.db.User
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
+import com.kokolex.lib.ui.vaadin.localDate_UI
+import com.kokolex.lib.ui.vaadin.name_UI
+import com.kokolex.lib.ui.vaadin.notes_UI
 import com.vaadin.flow.component.ItemLabelGenerator
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.datepicker.DatePicker
@@ -31,16 +34,16 @@ class TodoForm(
             dialog = openDialog {
                 verticalLayout {
                     formLayout {
-                        titleField = textField("Title") {
+                        titleField = name_UI("Title") {
                             isRequired = true
                             todo?.title?.let { value = it }
                         }
 
-                        dueDateField = datePicker("Due Date") {
+                        dueDateField = localDate_UI ("Due Date") {
                             todo?.dueAt?.let { value = it }
                         }
 
-                        notesField = textArea("Notes") {
+                        notesField = notes_UI("Notes") {
                             maxRows = 2
                             todo?.notes?.let { value = it }
                         }

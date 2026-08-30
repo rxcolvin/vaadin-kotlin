@@ -1,10 +1,9 @@
-package com.dankim.views
+package com.kokolex.vaadinexamplar.views
 
-import com.dankim.db.Todo
-import com.dankim.util.setDefaults
+import com.kokolex.vaadinexamplar.db.Todo
+import com.kokolex.vaadinexamplar.util.setDefaults
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.UI
-import com.vaadin.flow.component.Unit
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.data.value.ValueChangeMode

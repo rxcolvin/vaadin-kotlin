@@ -1,4 +1,4 @@
-package com.dankim.views
+package com.kokolex.vaadinexamplar.views
 
 import com.github.mvysny.karibudsl.v10.KComposite
 import com.github.mvysny.karibudsl.v10.content

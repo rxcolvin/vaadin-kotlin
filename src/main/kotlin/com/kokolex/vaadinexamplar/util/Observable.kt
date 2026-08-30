@@ -1,4 +1,4 @@
-package com.dankim.util
+package com.kokolex.vaadinexamplar.util
 
 class
 Observable<TType> {

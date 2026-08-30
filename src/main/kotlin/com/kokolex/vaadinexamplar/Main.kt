@@ -1,10 +1,8 @@
-package com.dankim
+package com.kokolex.vaadinexamplar
 
 import com.github.mvysny.vaadinboot.VaadinBoot
 import com.vaadin.flow.component.page.AppShellConfigurator
-import com.vaadin.flow.component.page.BodySize
 import com.vaadin.flow.component.page.Push
-import com.vaadin.flow.component.page.Viewport
 import com.vaadin.flow.shared.communication.PushMode
 import com.vaadin.flow.theme.Theme
 import com.zaxxer.hikari.HikariConfig
@@ -12,8 +10,8 @@ import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import com.dankim.db.Todos
-import com.dankim.db.Users
+import com.kokolex.vaadinexamplar.db.Todos
+import com.kokolex.vaadinexamplar.db.Users
 
 @Theme("my-theme")
 @Push(PushMode.AUTOMATIC) // websocket ui updates

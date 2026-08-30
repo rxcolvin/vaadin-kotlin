@@ -1,0 +1,259 @@
+
+#This file contains an informal model that describes entity type data and the component types that are part of it. It
+#includes metadata about the entity types and their component types that is typically used in database access and/or UI presentation
+#and/or RPC operations and/or documentation purposes.
+
+#The model is described using exemplars annotated with information that implies how the metadata might be used if
+#it is not obvious.
+
+#This section describes types that are mapped to kotlin types. Each type is mapped to a kotlin type and the
+#database column type and JDBC driver type and some constraints that can be overridden by extensions of those types
+
+
+AbstractScalarTypes: {
+    String: kotlin.String {
+        maxLength:Int? = 255
+        minLength:Int? = 0
+        format: String? = null //default is no format constraint unless formatRegex is specified
+        formatRegex: String? = null //If format is specified then this regex is used to validate the format
+        dbType: VARCHAR(constraints.minlength)
+    }
+
+    Text: kotlin.String {
+        maxLength:Int? = null
+        minLength:Int = 255
+        format: String? = null //default is no format constraint unless formatRegex is specified
+        formatRegex: String? = null //If format is specified then this regex is used to validate the format
+        dbType: TEXT
+    }
+
+    Int: kotlin.Int {
+        min:Int? = null
+        max:Int? = null
+    }
+
+    Instant: kotlinx.datetime.Instant
+
+    StringEnum: kotlin.Enum {
+        values: Set<(String, String)> //The set of values that are allowed for this enum
+        dbType: VARCHAR(values.maxLength()) // .maxLength() is a function that returns the max length of the enum values
+    }
+
+    IntEnum: kotlin.Enum {
+        values: Set<String(Int)|String> //The set of string values and their corresponding numeric values
+        dbType: INT
+    }
+
+    Boolean: kotlin.Boolean {
+        trueString: String = TRUE
+        falseString: String = FALSE
+        dbType: BOOLEAN
+    }
+}
+
+ComplexTypes: {
+    /**
+        A reference to an entity of another type. The type used may be dependent on the context and could be modeled
+        as a reference to the Entity type or the primary key type of the referenced entity one a special class that
+        is a union of the two. Any choices here are up to the implementation.
+
+        Note that when a field Type is an Entity type then foo:T is a shorthand for foo:&T
+
+        See Entity examples below
+    */
+    &T (where T:Entity): T or T.idType or T_Ref
+
+
+    /**
+        Field is a placeholder for a field declaration in a struct or entity in the format:
+        where <Type> is any (concrete) scalar type, List or Set or Reference to another entity
+    */
+    Field: {
+        fieldName:<Type> {
+            unique: Boolean = false // Indicates that the value must be unique across all entities of this type or across a related group of Structs.
+            name: Boolean = false // Indicates that the value represents the human-readable name of and Entity or Struct and should be presented in the UI when referenced.
+            columnName: String? = null // Allows the database to be overriden in extremis
+        }
+    }
+
+    Struct: kotlin.Any {
+        name: String? = null //Default is the name of the Type. Used in the UI to identify the type.
+        description:String? = null //For documentation purposes or the UI perhaps - it requested
+        fields:Field[]
+    }
+
+    /**
+        A List of a Scalar Type, a Struct Tupe or References to another Entity Type need not be unique in any sense,
+        so the same entry can appear multiple times in the list.
+    */
+    List<T>: kotlin.List<T>
+    /**
+        A Set of a Scalar Type, a Struct Type or a References to other Entity Types. The set must be unique, so
+        any Struct types need a definition of a uniqueness.
+    */
+    Set<T>: kotlin.Set<T>
+
+    Entity: kotlin.Any {
+        //A list of technical fields added to all entities - unless instructed otherwise
+        baseFields:[
+            _creationTS: Instant //The time the entity was created
+            _lastUpdatedTS: Instant //The time the entity was last updated
+        ]
+        name: String? = null //Default is the name of the Type. Used in the UI to identify the type.
+        description:String? = null //For documentation purposes or the UI perhaps - it requested
+        fields:Field[] //The fields that make up the entity. Must be at least one field.
+        idField:Field? = null //The field that is used as the primary key of the entiity. If this is not set then the first field is used if it is of a suitable typ, else report an error and stop processing.
+    }
+}
+
+ScalarTypes:{
+    UUID: String {
+        stringFormat: Base 36 encoding of UUID
+        maxLength:26 //Should be the max length of a base 36 encoded UUID
+        codeHints:|
+            //Encode a UUID to a base 36 string
+            @OptIn(ExperimentalUuidApi::class)
+            fun kotlin.uuid.Uuid.base36Encode(): String =
+                this.toULongs {
+                    mostSignificantBits, leastSignificantBits ->
+                        mostSignificantBits.toString(36) + leastSignificantBits.toString(36)
+                }
+
+            //Generate a new UUID and encode it to a base 36 string
+            @OptIn(ExperimentalUuidApi::class)
+            fun newUuid() = kotlin.uuid.Uuid.Companion.random().base36Encode()
+        |
+    }
+
+    EmailAddress: String {
+        constraints: {
+            minLength:3
+            maxLength:254 //Used to limit the length of the email address in UI and size of the database column
+            format:valid email address //Used to validate the email address format in the UI and any RPC server side validation
+        }
+    }
+
+    UTCTimestamp: Instant {
+        stringFormat: ISO8601
+    }
+
+    Age: Int {
+        constraints: {
+            min:0
+            max:120
+        }
+    }
+
+    Password: String {
+        constraints: {
+            minLength: as defined by an application's authentication policy
+            maxLength: as defined by an application's authentication policy
+            format: as defined by an application's authentication policy
+        }
+    }
+
+    //This is an example of a string enum
+    Gender: StringEnum {
+        values: [
+            MALE, 'Male'
+            FEMALE, 'Female'
+            OTHER, 'Other or not specified')
+        ]
+    }
+
+    /**
+        This is an example of an int enum - it consists of the String value an optional numeric value. If no
+        numeric value is specified, then the value is incremented from the preceding value. If the first value
+        is specified without a numeric value, then it is assigned the value 0.
+    */
+
+    Days: IntEnum {
+        values:[
+            SUNDAY, 0)
+            MONDAY, _ , 'Monday'
+            TUESDAY
+            WEDNESDAY)
+            THURSDAY)
+            FRIDAY
+            SATURDAY
+        ]
+    }
+
+    TrueOrFalse: Boolean {
+        trueString: TRUE
+        falseString: FALSE
+    }
+
+    YesOrNo: Boolean {
+        trueString: YES
+        falseString: NO
+    }
+
+    Name: String {
+        minLength:2
+        maxLength:50
+        format: Any except CR and tab
+    }
+
+    HumanName: String {
+        minLength:2
+        maxLength:50
+        format: Must a valid name containing only letters and spaces, "." and "'" and "-". (Viz "D'Arcy St. John-Smith")
+    }
+}
+
+Enumerations: {
+
+}
+
+NamingRules: {
+    TypeNames: Must be PascalCase, start with a letter and contain only letters or digits. Length < 25
+    FieldName: Must be camelCase, start with a letter and contain only letters or digits. Length < 25
+}
+
+/**
+    This section just contains examples of entities using all the various types. It's just for reference to help explain the model.
+*/
+EntityTypes: {
+    Room: Struct {
+        fields: [
+            name: Name {
+                unique: true
+                name: true
+            }
+            occupants: Set<Person>
+        ]
+    }
+
+    Person: Entity {
+        personId: UUID
+        name: HumanName {
+            name: true
+        }
+        age: Age
+        gender: Gender
+        email: EmailAddress
+        tags: Set<String>
+        nickName: Name? //Example of a nullable field
+    }
+
+    Property: Entity {
+        fields: [
+            propertyId: UUID
+            name: Name
+            owner: Person
+            rooms: Set<Room>
+        ]
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
