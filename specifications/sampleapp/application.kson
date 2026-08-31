@@ -3,12 +3,22 @@ applicationName: 'Sample App'
 applicationDescription: %
   A sample application used to build and test the process
   %%
-ui: Vaadin
+ui: {
+  framework: Vaadin
+  appLayout: Default
+  entities: {
+    Foo: {
+      layout: Default
+      entityEditorLayout: Default
+      searchResultsLayout: Default
+    }
+  }
+}
 storage:
   test: SQLite
   prod: SQLite
   .
-rpc: null
+rpc: NOP
 authentication: NONE
 types:%
   UUID: String {
@@ -35,3 +45,4 @@ types:%
       searchColumns: Default
     }
     %%
+  deployment: TODO
