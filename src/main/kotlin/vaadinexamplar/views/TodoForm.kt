@@ -1,7 +1,7 @@
-package com.kokolex.vaadinexamplar.views
+package vaadinexamplar.views
 
-import com.kokolex.vaadinexamplar.db.Todo
-import com.kokolex.vaadinexamplar.db.User
+import vaadinexamplar.db.Todo
+import vaadinexamplar.db.User
 import com.github.mvysny.karibudsl.v10.*
 import com.github.mvysny.kaributools.setPrimary
 import com.kokolex.lib.ui.vaadin.localDate_UI

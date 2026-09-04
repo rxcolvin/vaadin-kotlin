@@ -1,7 +1,7 @@
-package com.kokolex.vaadinexamplar.views
+package vaadinexamplar.views
 
-import com.kokolex.vaadinexamplar.db.Todo
-import com.kokolex.vaadinexamplar.util.setDefaults
+import vaadinexamplar.db.Todo
+import vaadinexamplar.util.setDefaults
 import com.github.mvysny.karibudsl.v10.*
 import com.vaadin.flow.component.UI
 import com.vaadin.flow.component.grid.Grid
@@ -19,7 +19,11 @@ class TodoList : KComposite() {
         verticalLayout {
             button("Add todo", icon = VaadinIcon.PLUS.create()) {
                 onClick {
-                    TodoForm { todo -> viewModel.insert(todo) }
+                    TodoForm { todo ->
+                        viewModel.insert(
+                            todo
+                        )
+                    }
                 }
             }
 

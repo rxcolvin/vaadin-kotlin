@@ -1,4 +1,4 @@
-package com.kokolex.vaadinexamplar.util
+package vaadinexamplar.util
 
 import com.vaadin.flow.component.grid.Grid
 import com.vaadin.flow.component.grid.GridVariant

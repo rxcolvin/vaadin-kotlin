@@ -1,6 +1,6 @@
-package com.kokolex.vaadinexamplar.views
+package vaadinexamplar.views
 
-import com.kokolex.vaadinexamplar.db.Todo
+import vaadinexamplar.db.Todo
 import com.github.mvysny.karibudsl.v10.*
 
 class TodoWithCheckbox(

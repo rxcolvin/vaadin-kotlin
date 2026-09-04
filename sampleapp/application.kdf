@@ -1,0 +1,71 @@
+application: {
+  id: sampleApp   //inline comment
+  name: 'Sample App'
+  applicationVersion: 1.0.0
+  applicationDescription: |
+    A sample application used to build and test the process
+      of developing a Kokolex application.
+    |
+}
+storage: {
+  default: {
+    framework: Exposed {
+        db = SQLite
+    }
+  }
+}
+targets: {
+    SSR_Vaadin {
+        ui: &desktop
+        storage: &default
+        executables: {
+            exeJar:{}
+        }
+    }
+}
+
+ui: {
+  default: {
+      navigation: Default
+      entities: {
+        Foo: {
+          layout: Default
+          entityEditorLayout: Default
+          searchResultsLayout: Default
+        }
+      }
+  }
+  desktop: {
+    extends: default
+    navigation: DeskTop
+  }
+}
+
+authenticationEtc: {
+    default: None
+}
+
+types:{
+  UUID: String {
+    format: 'Base 36 Encoded UUID'
+  }
+
+  Name: String {
+    minLength: 2
+    maxLength: 30
+    format: 'All characters excpet CR/LF and tab'
+  }
+
+  Foo: Entity {
+    fields: {
+      id: UUID        .
+      name: Name {
+        textSearch: true
+        isName: true
+      }
+      ui: Standard
+      entityLayout: Default
+      searchColumns: Default
+    }
+  }
+}

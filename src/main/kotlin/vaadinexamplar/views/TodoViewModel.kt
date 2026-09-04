@@ -1,24 +1,28 @@
-package com.kokolex.vaadinexamplar.views
+package vaadinexamplar.views
 
-import com.kokolex.vaadinexamplar.database
-import com.kokolex.vaadinexamplar.db.Todo
-import com.kokolex.vaadinexamplar.db.Todos
-import com.kokolex.vaadinexamplar.db.User
-import com.kokolex.vaadinexamplar.db.Users
-import com.kokolex.vaadinexamplar.util.Observable
+import vaadinexamplar.database
+import vaadinexamplar.db.Todo
+import vaadinexamplar.db.Todos
+import vaadinexamplar.db.User
+import vaadinexamplar.db.Users
+import vaadinexamplar.util.Observable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.sql.update
 import java.time.LocalDate
 import kotlin.coroutines.CoroutineContext
 
 class TodoViewModel : CoroutineScope {
-    var todos: Observable<List<Todo>> = Observable()
-    var users: Observable<List<User>> = Observable()
+    var todos: Observable<List<Todo>> =
+        Observable()
+    var users: Observable<List<User>> =
+        Observable()
     private var searchTerm: String? = null
 
     private val job = SupervisorJob()
@@ -32,7 +36,9 @@ class TodoViewModel : CoroutineScope {
         }
 
         launch {
-            todos.value = newSuspendedTransaction(Dispatchers.IO, database) {
+            todos.value = newSuspendedTransaction(Dispatchers.IO,
+                database
+            ) {
                 val query = Todos.join(Users, JoinType.LEFT, Todos.userId, Users.id)
                     .selectAll()
                     .orderBy(Todos.completedAt, SortOrder.DESC)
@@ -62,13 +68,16 @@ class TodoViewModel : CoroutineScope {
 
     fun fetchUsers() {
         launch {
-            users.value = newSuspendedTransaction(Dispatchers.IO, database) {
+            users.value = newSuspendedTransaction(Dispatchers.IO,
+                database
+            ) {
                 Users.selectAll()
                     .orderBy(Users.name)
                     .map {
                         User(
                             id = it[Users.id].value,
-                            name = it[Users.name] ?: "No Name"
+                            name = it[Users.name]
+                                ?: "No Name"
                         )
                     }
             }

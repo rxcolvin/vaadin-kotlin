@@ -1,4 +1,4 @@
-package com.kokolex.vaadinexamplar
+package vaadinexamplar
 
 import com.github.mvysny.vaadinboot.VaadinBoot
 import com.vaadin.flow.component.page.AppShellConfigurator
@@ -10,8 +10,8 @@ import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import com.kokolex.vaadinexamplar.db.Todos
-import com.kokolex.vaadinexamplar.db.Users
+import vaadinexamplar.db.Todos
+import vaadinexamplar.db.Users
 
 @Theme("my-theme")
 @Push(PushMode.AUTOMATIC) // websocket ui updates
@@ -19,7 +19,10 @@ class AppShell : AppShellConfigurator
 
 fun main(args: Array<String>) {
     transaction(database) {
-        SchemaUtils.create(Users, Todos)
+        SchemaUtils.create(
+            Users,
+            Todos
+        )
     }
     VaadinBoot().run()
 }

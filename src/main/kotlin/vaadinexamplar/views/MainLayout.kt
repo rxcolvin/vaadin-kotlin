@@ -1,15 +1,13 @@
-package com.kokolex.vaadinexamplar.views
+package vaadinexamplar.views
 
 import com.github.mvysny.karibudsl.v10.KComposite
 import com.github.mvysny.karibudsl.v10.content
 import com.github.mvysny.karibudsl.v10.div
-import com.github.mvysny.karibudsl.v10.flexGrow
 import com.github.mvysny.karibudsl.v10.h1
 import com.github.mvysny.karibudsl.v10.isExpand
 import com.github.mvysny.karibudsl.v10.verticalLayout
 import com.vaadin.flow.component.Component
 import com.vaadin.flow.component.HasElement
-import com.vaadin.flow.component.orderedlayout.VerticalLayout
 import com.vaadin.flow.router.RouterLayout
 
 class MainLayout : KComposite(), RouterLayout {

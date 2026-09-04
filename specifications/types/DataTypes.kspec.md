@@ -140,7 +140,7 @@ Foo: Entity {
             label = Foo Name
             description = The name of the Foo
             searchable =  true
-            textSearchable =  true
+            textSearchable = true
             minColumnWidth = 10
             maxColumnWidth = 20
         }
@@ -148,7 +148,10 @@ Foo: Entity {
             label = "Foo Age" 
             description = The age of the Foo
             searchable = true
-        }    
+        }
+        optionalName: Name? {
+            label = "Optional Foo Name"
+        }   
     }
     label = Foo
     description = A Foo
